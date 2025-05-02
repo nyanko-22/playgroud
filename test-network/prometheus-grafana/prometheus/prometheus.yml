@@ -23,3 +23,8 @@ scrape_configs:
   - job_name: node
     static_configs:
       - targets: ['node-exporter:9100']
+  # Caliper PushGateway の登録
+  - job_name: 'caliper'
+    metrics_path: /metrics
+    static_configs:
+      - targets: ['pushgateway:9091']

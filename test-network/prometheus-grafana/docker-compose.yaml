@@ -18,7 +18,13 @@ services:
       - '--web.console.templates=/usr/share/prometheus/consoles'
     ports:
       - "9090:9090"
-    
+  
+  pushgateway:
+    image: prom/pushgateway
+    ports:
+      - "9091:9091"
+    restart: always
+  
   grafana:
     image: grafana/grafana:8.3.4
     container_name: grafana

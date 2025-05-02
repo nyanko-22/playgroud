@@ -8,7 +8,7 @@ test:
   rounds:
     - label: CreateAssets
       description: Create unique assets
-      txDuration: 30     # 30秒間連続送信
+      txDuration: 10     # 30秒間連続送信
       rateControl:
         type: fixed-load
         opts:
@@ -18,10 +18,17 @@ test:
 
     - label: ReadAssets
       description: Read previously created assets
-      txDuration: 30     # Createと同じ時間だけ実行
+      txDuration: 10     # Createと同じ時間だけ実行
       rateControl:
         type: fixed-load
         opts:
           tps: 50
       workload:
         module: ./workload/read-asset.js
+        
+  observer:
+    type: prometheus
+    interval: 5           # 5秒ごとにPush
+    prometheus:
+      pushUrl: 'http://localhost:9091/metrics'
+      jobName: 'caliper'
