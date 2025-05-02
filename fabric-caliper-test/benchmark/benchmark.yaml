@@ -1,0 +1,17 @@
+test:
+  name: basic-test
+  description: Fabric basic benchmark
+  workers:
+    type: local
+    number: 1
+  rounds:
+    - label: createAssets
+      description: Create new assets
+      txNumber: 100
+      rateControl:
+        type: fixed-rate
+        opts:
+          tps: 10
+      workload:
+        module: workload/createAsset.js
+

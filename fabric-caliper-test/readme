@@ -1,0 +1,31 @@
+# npm install -g --only=prod @hyperledger/caliper-cli
+
+# npm install --save-dev \
+# @hyperledger/caliper-core@0.6.0 \
+# @hyperledger/caliper-fabric@0.6.0
+
+# npm uninstall -g @hyperledger/caliper-cli
+# npm install --save-dev @hyperledger/caliper-cli@0.6.0
+
+npm i
+
+# npx caliper launch manager \
+# --caliper-bind-sut fabric:2.2 \
+# --caliper-workspace . \
+# --caliper-benchconfig benchmark/benchmark.yaml \
+# --caliper-networkconfig networks/networkConfig.yaml \
+# --caliper-flow-only-test
+
+npx caliper launch manager \
+--caliper-workspace . \
+--caliper-benchconfig benchmark/benchmark.yaml \
+--caliper-networkconfig networks/networkConfig.yaml \
+--caliper-flow-only-test \
+--caliper-fabric-gateway-enabled
+
+# npx caliper launch manager  \
+# --caliper-workspace ./  \
+# --caliper-networkconfig networks/networkConfig.yaml  \
+# --caliper-benchconfig benchmarks/myAssetBenchmark.yaml  \
+# --caliper-flow-only-test  \
+# --caliper-fabric-gateway-enabled

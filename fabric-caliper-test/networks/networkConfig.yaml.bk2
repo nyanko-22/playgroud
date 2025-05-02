@@ -1,0 +1,76 @@
+name: Caliper Test Network
+version: 2.0.0
+caliper:
+  blockchain: fabric
+  organization: Org1
+
+
+channels:
+  mychannel:
+    orderers:
+      - orderer.example.com
+    peers:
+      peer0.org1.example.com:
+        eventSource: true
+
+# organizations:
+#   - name: Org1MSP
+#     mspid: Org1MSP
+#     identities:
+#       - name: User1
+#         enrolled: true
+#         credentials:
+#           certificate:
+#             path: ""
+#             x-type: X.509
+#             pem: |
+#               -----BEGIN CERTIFICATE-----
+#               MIICKjCCAdCgAwIBAgIQN7SxFkZu/njdQw/6auAE6TAKBggqhkjOPQQDAjBzMQsw
+#               CQYDVQQGEwJVUzETMBEGA1UECBMKQ2FsaWZvcm5pYTEWMBQGA1UEBxMNU2FuIEZy
+#               YW5jaXNjbzEZMBcGA1UEChMQb3JnMS5leGFtcGxlLmNvbTEcMBoGA1UEAxMTY2Eu
+#               b3JnMS5leGFtcGxlLmNvbTAeFw0yNTA1MDExNjU2MDBaFw0zNTA0MjkxNjU2MDBa
+#               MGwxCzAJBgNVBAYTAlVTMRMwEQYDVQQIEwpDYWxpZm9ybmlhMRYwFAYDVQQHEw1T
+#               YW4gRnJhbmNpc2NvMQ8wDQYDVQQLEwZjbGllbnQxHzAdBgNVBAMMFlVzZXIxQG9y
+#               ZzEuZXhhbXBsZS5jb20wWTATBgcqhkjOPQIBBggqhkjOPQMBBwNCAAQJ0m9lKg/g
+#               +DEbTcLJOsvSMmAN2Zqw4cwI2/oGfYLSW7yiPf/0bY9V8ooTgYb3gQUTaHpQxbEl
+#               R36QZrJbJ20to00wSzAOBgNVHQ8BAf8EBAMCB4AwDAYDVR0TAQH/BAIwADArBgNV
+#               HSMEJDAigCC6ATFEie7uFGujYt/wPOAoUCw6/nZbexk64tVxFdoBwjAKBggqhkjO
+#               PQQDAgNIADBFAiEAqJcHgZnNL3FkUyDaZlUu1K6BvtLN9sTepHIWwFS/c1ICIDw5
+#               xw8Jegto4di6zjZc29aW7kn8o+1/2dXW/118PHDO
+#               -----END CERTIFICATE-----
+#           privateKey:
+#             path: ""
+#             x-type: "EC"
+#             pem: |
+#               -----BEGIN PRIVATE KEY-----
+#               MIGHAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBG0wawIBAQQgfs6xNGtmjwQrDAqI
+#               XAGZNfM42rhWK3R2gVqdbXWdq0ihRANCAAQJ0m9lKg/g+DEbTcLJOsvSMmAN2Zqw
+#               4cwI2/oGfYLSW7yiPf/0bY9V8ooTgYb3gQUTaHpQxbElR36QZrJbJ20t
+#               -----END PRIVATE KEY-----
+
+organizations:
+  - name: Org1
+    mspid: Org1MSP
+    identities:
+      - role: admin
+        enrollment:
+          certificate: ./organizations/peerOrganizations/org1.example.com/users/User1@org1.example.com/msp/signcerts/User1@org1.example.com-cert.pem
+          key: ./organizations/peerOrganizations/org1.example.com/users/User1@org1.example.com/msp/keystore/priv_sk
+
+orderers:
+  orderer.example.com:
+    grpcOptions:
+      ssl-target-name-override: orderer.example.com
+      hostnameOverride: orderer.example.com
+    tlsCACerts:
+      path: ./organizations/ordererOrganizations/example.com/orderers/orderer.example.com/tls/ca.crt
+    url: grpcs://localhost:7050
+
+peers:
+  peer0.org1.example.com:
+    grpcOptions:
+      ssl-target-name-override: peer0.org1.example.com
+      hostnameOverride: peer0.org1.example.com
+    tlsCACerts:
+      path: ./organizations/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt
+    url: grpcs://localhost:7051
