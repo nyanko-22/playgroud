@@ -1,17 +1,27 @@
 test:
-  name: basic-test
-  description: Fabric basic benchmark
+  name: Fabric Asset Benchmark
+  description: Create and Read Asset test on Hyperledger Fabric
   workers:
     type: local
-    number: 1
-  rounds:
-    - label: createAssets
-      description: Create new assets
-      txNumber: 100
-      rateControl:
-        type: fixed-rate
-        opts:
-          tps: 10
-      workload:
-        module: workload/createAsset.js
+    number: 5   # 同時並行で動かすワーカー数（調整可）
 
+  rounds:
+    - label: CreateAssets
+      description: Create unique assets
+      txDuration: 30     # 30秒間連続送信
+      rateControl:
+        type: fixed-load
+        opts:
+          tps: 50         # 1秒あたり50tx送信
+      workload:
+        module: ./workload/create-asset.js
+
+    - label: ReadAssets
+      description: Read previously created assets
+      txDuration: 30     # Createと同じ時間だけ実行
+      rateControl:
+        type: fixed-load
+        opts:
+          tps: 50
+      workload:
+        module: ./workload/read-asset.js
