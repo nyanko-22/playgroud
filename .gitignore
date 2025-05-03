@@ -35,3 +35,4 @@ install-fabric.sh
 fabric-caliper-test/caliper.log
 fabric-caliper-test/organizations
 fabric-caliper-test/workload/assets_worker*.json
+caliper/metrics.log

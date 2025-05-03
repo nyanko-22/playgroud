@@ -1,8 +1,21 @@
+https://arxiv.org/pdf/1805.11390
+https://arxiv.org/pdf/2502.08755
+https://github.com/adityajoshi12/fabric-samples-advance-topics/tree/v2.4?tab=readme-ov-file
+https://aklenik.github.io/caliper/v0.4.2/caliper-monitors/
+
+
+
+
+./network.sh up createChannel -ca -c mychannel -s couchdb
+./network.sh deployCC -ccn basic -ccp ../asset-transfer-basic/chaincode-go -ccl go
+
 
 peer chaincode invoke -o localhost:7050 --ordererTLSHostnameOverride orderer.example.com --tls --cafile "$ORDERER_CA" -C mychannel -n basic --peerAddresses localhost:7051 --tlsRootCertFiles "$PEER0_ORG1_CA" --peerAddresses localhost:9051 --tlsRootCertFiles "$PEER0_ORG2_CA" -c '{"function":"CreateAsset","Args":["asset-test2","red","4","Naoki","100"]}'
 
 peer chaincode query -C mychannel -n basic -c '{"function":"ReadAsset","Args":["asset1"]}'
 
+cd ../asset-transfer-basic/application-gateway-javascript
+npm i
 
 
 # npm install -g --only=prod @hyperledger/caliper-cli

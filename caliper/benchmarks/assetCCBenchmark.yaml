@@ -1,0 +1,109 @@
+test:
+  name: basic-contract-benchmark
+  description: A test benchmark
+  workers:
+    type: local
+    number: 5
+  rounds:
+    - label: createAsset
+      description: Create asset benchmark
+      txNumber: 1000
+      rateControl:
+        { type: "linear-rate", opts: { startingTps: 50, finishingTps: 200 } }
+      workload:
+        module: workload/createAsset.js
+        arguments:
+          contractId: basic
+    - label: readAsset
+      description: Read asset benchmark
+      txDuration: 60
+      rateControl: { type: "fixed-load", opts: { transactionLoad: 5 } }
+      workload:
+        module: workload/readAsset.js
+        arguments:
+          assets: 10
+          contractId: basic
+
+monitors:
+  transaction:
+    # - module: prometheus
+    - module: prometheus-push
+      options:
+        pushInterval: 50
+        pushUrl: "http://localhost:9091"
+
+  resource:
+    - module: docker
+      options:
+        interval: 5
+        containers:
+          - all
+          # - peer0.org1.example.com
+          # - peer0.org2.example.com
+          # - orderer.example.com
+        charting:
+          bar:
+            metrics:
+              - Memory(avg)
+              - CPU%(avg)
+          polar:
+            metrics:
+              - all
+              # - Memory(max)
+              # - CPU%(max)
+              # - Memory(min)
+              # - CPU%(min)
+    - module: prometheus
+      options:
+        url: "http://localhost:9090"
+        metrics:
+          include: [dev.*, couch.*, peer.*, orderer.*]
+          queries:
+            - name: Endorse Time (s)
+              query: rate(endorser_proposal_duration_sum{chaincode="basic"}[1m]) 
+                / rate(endorser_proposal_duration_count{chaincode="basic"}[1m])
+              step: 1
+              label: instance
+              statistic: avg
+
+            - name: Max Memory (MB)
+              query: sum(container_memory_rss{name=~".+"}) by (name)
+              step: 10
+              label: name
+              statistic: max
+              multiplier: 0.000001
+
+        charting:
+          polar:
+            metrics:
+              - Max Memory (MB)
+          bar:
+            metrics:
+              - Endorse Time (s)
+              - Max Memory (MB)
+
+
+
+
+# monitors:
+#   resource:
+#     - module: docker
+#       options:
+#         interval: 5
+#         containers:
+#           [
+#             "peer0.org1.example.com",
+#             "peer0.org2.example.com",
+#             "orderer.example.com",
+#           ]
+#         charting:
+#           bar:
+#             metrics: [Memory(avg), CPU%(avg)]
+#           polar:
+#             metrics: [all]
+
+  # transaction:
+  #   - module: prometheus-push
+  #     options:
+  #       pushInterval: 5000
+  #       pushUrl: "http://localhost:9091"
